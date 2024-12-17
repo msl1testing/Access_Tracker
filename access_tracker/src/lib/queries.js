@@ -1,7 +1,12 @@
 export const fetchUserTools = `
-  SELECT u.name AS user_name, GROUP_CONCAT(t.tool_name SEPARATOR ', ') AS tools
-FROM user_tools ut
-JOIN users u ON ut.user_id = u.user_id
-JOIN tools t ON ut.tool_id = t.tool_id
-GROUP BY u.user_id;
+  SELECT 
+        users.name AS user_name, 
+        users.team AS team_name,
+        tools.tool_name,
+        user_tools.access_level,   -- Fetching access_level
+        user_tools.tool_owner      -- Fetching tool_owner
+      FROM user_tools
+      JOIN users ON user_tools.user_id = users.user_id
+      JOIN tools ON user_tools.tool_id = tools.tool_id
+      ORDER BY users.name, tools.tool_name;
 `;
