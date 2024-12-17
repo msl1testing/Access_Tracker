@@ -6,12 +6,11 @@ body {
   padding: 0;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start; /* Align to the top */
   height: 100vh;
   color: #333;
 }
 
-/* Container for your page */
 div {
   width: 80%;
   max-width: 1200px;
@@ -22,7 +21,6 @@ div {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Header */
 h1 {
   font-size: 2rem;
   color: #2c3e50;
@@ -30,7 +28,14 @@ h1 {
   text-align: center;
 }
 
-/* Table Styles */
+input {
+  font-size: 1rem;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -51,24 +56,4 @@ th {
 
 tr:hover {
   background-color: #f1f1f1;
-}
-
-td {
-  font-size: 1rem;
-  color: #555;
-}
-
-/* No Data Message */
-td[colspan="2"] {
-  text-align: center;
-  color: #888;
-  font-style: italic;
-}
-
-/* Loading State */
-.loading {
-  font-size: 1.5rem;
-  color: #3498db;
-  text-align: center;
-  margin-top: 50px;
 }
