@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useState, useEffect } from 'react';
 
@@ -37,7 +37,7 @@ export default function UserToolsPage() {
   }, [teamSearchTerm, userSearchTerm, toolSearchTerm, clientSearchTerm, userTools]);
 
   return (
-    <div className='max-h-screen scroll-smooth'>
+    <div className="max-h-screen scroll-smooth">
       <h1>User Access Tracker</h1>
 
       {/* Search inputs in a flex container */}
@@ -87,6 +87,7 @@ export default function UserToolsPage() {
             <th>Tool Name</th>
             <th>Access Level</th>
             <th>Client</th>
+            <th>MS Status</th> {/* New column for MS Status */}
           </tr>
         </thead>
         <tbody>
@@ -98,11 +99,12 @@ export default function UserToolsPage() {
                 <td>{item.tool_name}</td>
                 <td>{item.access_level}</td> {/* Display Access Level */}
                 <td>{item.tool_owner}</td> {/* Display Tool Owner (Client) */}
+                <td>{item.ms_status}</td> {/* Display MS Status */}
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="5">No data available</td> {/* Adjusted colspan for 5 columns */}
+              <td colSpan="6">No data available</td> {/* Adjusted colspan for 6 columns */}
             </tr>
           )}
         </tbody>
