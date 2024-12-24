@@ -78,37 +78,37 @@ export default function UserToolsPage() {
           className="p-2 border border-gray-300 rounded"
         />
       </div>
-
       <table border="1">
-        <thead>
-          <tr>
-            <th>Team Name</th>
-            <th>User Name</th>
-            <th>Tool Name</th>
-            <th>Access Level</th>
-            <th>Client</th>
-            <th>MS Status</th> {/* New column for MS Status */}
-          </tr>
-        </thead>
-        <tbody>
-          {filteredUserTools.length > 0 ? (
-            filteredUserTools.map((item, index) => (
-              <tr key={index}>
-                <td>{item.team_name}</td>
-                <td>{item.user_name}</td>
-                <td>{item.tool_name}</td>
-                <td>{item.access_level}</td> {/* Display Access Level */}
-                <td>{item.tool_owner}</td> {/* Display Tool Owner (Client) */}
-                <td>{item.ms_status}</td> {/* Display MS Status */}
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="6">No data available</td> {/* Adjusted colspan for 6 columns */}
-            </tr>
-          )}
-        </tbody>
-      </table>
+  <thead>
+    <tr>
+      <th>Team Name</th>
+      <th>User Name</th>
+      <th>Tool Name</th>
+      <th>Access Level</th>
+      <th>Client</th>
+      <th>MS Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    {filteredUserTools.length > 0 ? (
+      filteredUserTools.map((item, index) => (
+        <tr key={index}>
+          <td>{item.team_name}</td>
+          <td>{item.user_name}</td>
+          <td>{item.tool_name}</td>
+          <td>{item.access_level}</td>
+          <td>{item.tool_owner}</td>
+          <td>{item.ms_status}</td>
+        </tr>
+      ))
+    ) : (
+      <tr>
+        <td colSpan="6">No data available</td>
+      </tr>
+    )}
+  </tbody>
+</table>
+
     </div>
   );
 }
