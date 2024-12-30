@@ -37,11 +37,11 @@ export default function UserToolsPage() {
   }, [teamSearchTerm, userSearchTerm, toolSearchTerm, clientSearchTerm, userTools]);
 
   return (
-    <div className="max-h-screen scroll-smooth">
+    <div className='body' >
       <h1>User Access Tracker</h1>
 
       {/* Search inputs in a flex container */}
-      <div className="flex justify-center items-center w-full space-x-4 mt-4">
+      <div className='searchField'>
         {/* Search by team name */}
         <input
           type="text"
@@ -78,6 +78,7 @@ export default function UserToolsPage() {
           className="p-2 border border-gray-300 rounded"
         />
       </div>
+      <div className='table'>
       <table border="1">
   <thead>
     <tr>
@@ -108,6 +109,7 @@ export default function UserToolsPage() {
     )}
   </tbody>
 </table>
+</div>
 
     </div>
   );
