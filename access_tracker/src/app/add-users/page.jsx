@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation'; // Import useRouter for navigation
 
 // Modal Component for Authentication
 const Modal = ({ onClose, onAuthenticate, errorMessage }) => {
@@ -60,6 +61,7 @@ const AddEntryPage = () => {
   const [user, setUser] = useState({ name: '', team: '' });
   const [tool, setTool] = useState({ tool_id: '', access_level: '', tool_owner: '', ms_status: 'NA' });
   const [errorMessage, setErrorMessage] = useState(''); // Error message for failed authentication
+  const router = useRouter(); // Initialize useRouter for navigation
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -82,6 +84,7 @@ const AddEntryPage = () => {
       const data = await response.json();
       if (response.ok) {
         alert('Entry added successfully!');
+        router.push('/admin'); // Redirect to the Admin page upon success
       } else {
         alert(`Error: ${data.message}`);
       }
@@ -123,13 +126,13 @@ const AddEntryPage = () => {
 
   // If authenticated, show the main form
   return (
-    <div className="body ">
+    <div className="body">
       <h1>Add New Entry</h1>
       <form onSubmit={handleSubmit}>
         <h3>User Details</h3>
         <label>
-          Name:                  
-        <input type="text" name="name" value={user.name} onChange={handleInputChange} required />
+          Name:
+          <input type="text" name="name" value={user.name} onChange={handleInputChange} required />
         </label>
         <label>
           Team:
@@ -138,22 +141,23 @@ const AddEntryPage = () => {
 
         <h3>Tool Details</h3>
         <label>
-          Tool ID: 
+          Tool ID:
           <input type="number" name="tool_id" value={tool.tool_id} onChange={handleInputChange} required />
         </label>
         <label>
-          Access Level: 
+          Access Level:
           <input type="text" name="access_level" value={tool.access_level} onChange={handleInputChange} />
         </label>
         <label>
-          Tool Owner: 
+          Tool Owner:
           <input type="text" name="tool_owner" value={tool.tool_owner} onChange={handleInputChange} />
         </label>
         <label>
-          MS Status: 
+          MS Status:
           <input type="text" name="ms_status" value={tool.ms_status} onChange={handleInputChange} />
         </label>
-        <br /><br />
+        <br />
+        <br />
         <button type="submit">Add Entry</button>
       </form>
     </div>

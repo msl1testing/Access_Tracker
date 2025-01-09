@@ -28,3 +28,13 @@ export const addUserTool = async (db, userId, toolId, accessLevel, toolOwner, ms
   `;
   await db.execute(query, [userId, toolId, accessLevel, toolOwner, msStatus]);
 };
+
+
+export const fetchUsers = `
+  SELECT 
+    user_id,
+    name,
+    team
+  FROM users
+  ORDER BY name;
+`;
