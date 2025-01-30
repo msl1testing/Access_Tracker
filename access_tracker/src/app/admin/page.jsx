@@ -191,7 +191,7 @@ export default function AdminPage() {
                   <td>{user.team}</td>
                   <td>{user.email_id}</td>
                   <td>
-                    <button>
+                    <button style={{ marginRight: '10px' }}>
                       <FaEdit className="icon" />
                     </button>
                     <button onClick={() => openDeleteModal(user.user_id)}>

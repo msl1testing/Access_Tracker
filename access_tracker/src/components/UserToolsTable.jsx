@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'; // Import useRouter for navigation
 export default function UserToolsTable({ data, searchTerms, setSearchTerms }) {
   const [filteredUserTools, setFilteredUserTools] = useState([]);
   const router = useRouter();
-  
+
   useEffect(() => {
     const results = data.filter((item) =>
       item.team_name.toLowerCase().includes(searchTerms.team.toLowerCase()) &&
@@ -16,6 +16,7 @@ export default function UserToolsTable({ data, searchTerms, setSearchTerms }) {
     );
     setFilteredUserTools(results);
   }, [searchTerms, data]);
+
   const handleAdminClick = () => {
     router.push('/admin'); // Navigate to the admin page
   };
@@ -37,32 +38,68 @@ export default function UserToolsTable({ data, searchTerms, setSearchTerms }) {
           Admin
         </button>
       </div>
-      
+
       {/* Search Inputs */}
-      <div className="searchField">
+      <div className="searchField" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '20px' }}>
         <input
           type="text"
           placeholder="Search by team name"
           value={searchTerms.team}
           onChange={(e) => setSearchTerms((prev) => ({ ...prev, team: e.target.value }))}
+          style={{
+            padding: '10px',
+            borderRadius: '5px',
+            border: '1px solid #ccc',
+            width: '200px',
+            fontSize: '14px',
+            outline: 'none',
+            transition: 'border-color 0.3s',
+          }}
         />
         <input
           type="text"
           placeholder="Search by user name"
           value={searchTerms.user}
           onChange={(e) => setSearchTerms((prev) => ({ ...prev, user: e.target.value }))}
+          style={{
+            padding: '10px',
+            borderRadius: '5px',
+            border: '1px solid #ccc',
+            width: '200px',
+            fontSize: '14px',
+            outline: 'none',
+            transition: 'border-color 0.3s',
+          }}
         />
         <input
           type="text"
           placeholder="Search by tool name"
           value={searchTerms.tool}
           onChange={(e) => setSearchTerms((prev) => ({ ...prev, tool: e.target.value }))}
+          style={{
+            padding: '10px',
+            borderRadius: '5px',
+            border: '1px solid #ccc',
+            width: '200px',
+            fontSize: '14px',
+            outline: 'none',
+            transition: 'border-color 0.3s',
+          }}
         />
         <input
           type="text"
           placeholder="Search by client"
           value={searchTerms.client}
           onChange={(e) => setSearchTerms((prev) => ({ ...prev, client: e.target.value }))}
+          style={{
+            padding: '10px',
+            borderRadius: '5px',
+            border: '1px solid #ccc',
+            width: '200px',
+            fontSize: '14px',
+            outline: 'none',
+            transition: 'border-color 0.3s',
+          }}
         />
       </div>
 
