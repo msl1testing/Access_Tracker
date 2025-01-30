@@ -23,24 +23,30 @@ export default function UserToolsTable({ data, searchTerms, setSearchTerms }) {
 
   return (
     <div className="body">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1>User Access Tracker</h1>
-        <button
-          style={{
-            padding: '10px 20px',
-            backgroundColor: '#007BFF',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-          }}
-          onClick={handleAdminClick}>
-          Admin
-        </button>
-      </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+  <div style={{ flex: 1, textAlign: 'center' }}>
+    <h1>User Access Tracker</h1>
+  </div>
+  <div>
+    <button
+      style={{
+        padding: '10px 20px',
+        backgroundColor: '#3498db',
+        color: '#fff',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+      }}
+      onClick={handleAdminClick}
+    >
+      Admin
+    </button>
+  </div>
+</div>
+
 
       {/* Search Inputs */}
-      <div className="searchField" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '20px' }}>
+      <div className="searchField" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '20px'}}>
         <input
           type="text"
           placeholder="Search by team name"

@@ -138,7 +138,11 @@ export default function AdminPage() {
   const handleAddUserClick = () => {
     router.push('/add-users'); // Navigate to the add-users page
   };
-
+  
+  const handleHomeClick = () => {
+    router.push('/user-tools'); // Navigate to the add-users page
+  };
+  
   const openDeleteModal = (userId) => {
     setUserIdToDelete(userId);
     setIsModalOpen(true);
@@ -156,22 +160,40 @@ export default function AdminPage() {
 
   return (
     <div className="body">
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1>Admin Page</h1>
-        <button
-          style={{
-            padding: '10px 20px',
-            backgroundColor: '#007BFF',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-          }}
-          onClick={handleAddUserClick} // Call the function to navigate
-        >
-          Add User
-        </button>
-      </div>
+<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+  <div style={{ flex: 1, textAlign: 'center' }}>
+    <h1>Admin Page</h1>
+  </div>
+  <div style={{ display: 'flex', gap: '10px' }}>
+    <button
+      style={{
+        padding: '10px 20px',
+        backgroundColor: '#3498db',
+        color: '#fff',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+      }}
+      onClick={handleAddUserClick} // Call the function to navigate
+    >
+      Add User
+    </button>
+    <button
+      style={{
+        padding: '10px 20px',
+        backgroundColor: '#3498db',
+        color: '#fff',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+      }}
+      onClick={handleHomeClick} // Call the function to navigate
+    >
+      Home
+    </button>
+  </div>
+</div>
+
 
       <div className="table" style={{ marginTop: '20px' }}>
         <table border="1" style={{ width: '100%', borderCollapse: 'collapse' }}>
