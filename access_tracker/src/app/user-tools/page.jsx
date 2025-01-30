@@ -7,6 +7,7 @@ export default function UserToolsPage() {
   const [userTools, setUserTools] = useState([]);
   const [searchTerms, setSearchTerms] = useState({ team: '', user: '', tool: '', client: '' });
 
+  
   useEffect(() => {
     async function fetchData() {
       try {
@@ -21,5 +22,7 @@ export default function UserToolsPage() {
     fetchData();
   }, []);
 
+ 
   return <UserToolsTable data={userTools} searchTerms={searchTerms} setSearchTerms={setSearchTerms} />;
+  
 }

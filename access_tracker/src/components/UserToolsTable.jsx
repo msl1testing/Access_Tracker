@@ -1,10 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation'; // Import useRouter for navigation
 
 export default function UserToolsTable({ data, searchTerms, setSearchTerms }) {
   const [filteredUserTools, setFilteredUserTools] = useState([]);
-
+  const router = useRouter();
+  
   useEffect(() => {
     const results = data.filter((item) =>
       item.team_name.toLowerCase().includes(searchTerms.team.toLowerCase()) &&
@@ -14,11 +16,28 @@ export default function UserToolsTable({ data, searchTerms, setSearchTerms }) {
     );
     setFilteredUserTools(results);
   }, [searchTerms, data]);
+  const handleAdminClick = () => {
+    router.push('/admin'); // Navigate to the admin page
+  };
 
   return (
     <div className="body">
-      <h1>User Access Tracker</h1>
-
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h1>User Access Tracker</h1>
+        <button
+          style={{
+            padding: '10px 20px',
+            backgroundColor: '#007BFF',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer',
+          }}
+          onClick={handleAdminClick}>
+          Admin
+        </button>
+      </div>
+      
       {/* Search Inputs */}
       <div className="searchField">
         <input
