@@ -52,7 +52,7 @@ const AddEntryPage = () => {
           <input type="text" name="team" value={user.team} onChange={handleInputChange} required />
         </label>
         <label>
-          Email:
+          Email ID:
           <input type="email" name="email_id" value={user.email_id} onChange={handleInputChange} required />
         </label>
 

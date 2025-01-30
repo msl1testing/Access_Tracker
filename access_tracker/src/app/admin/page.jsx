@@ -1,14 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { useRouter } from 'next/navigation'; // Import useRouter for navigation
+import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 
 // Modal for authentication
 const AuthModal = ({ onAuthenticate, onClose, errorMessage }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -157,7 +156,7 @@ export default function AdminPage() {
 
   return (
     <div className="body">
-<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h1>Admin Page</h1>
         <button
           style={{
@@ -180,6 +179,7 @@ export default function AdminPage() {
             <tr>
               <th>Name</th>
               <th>Team Name</th>
+              <th>Email ID</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -189,6 +189,7 @@ export default function AdminPage() {
                 <tr key={index}>
                   <td>{user.name}</td>
                   <td>{user.team}</td>
+                  <td>{user.email_id}</td>
                   <td>
                     <button>
                       <FaEdit className="icon" />

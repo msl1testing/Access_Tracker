@@ -45,7 +45,8 @@ export const fetchUsers = `
   SELECT 
     user_id,
     name,
-    team
+    team,
+    email_id
   FROM users
   ORDER BY name;
 `;

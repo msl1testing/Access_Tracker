@@ -1,5 +1,5 @@
 import mysql from "mysql2/promise";
-import { addUser, addUserTool } from "@/lib/queries";
+import { addUser, addUserTool } from "@/lib/queries";  
 
 export async function POST(req) {
   try {
@@ -12,10 +12,10 @@ export async function POST(req) {
       database: process.env.DB_NAME,
     });
 
-    // Insert the user into the 'users' table with email_id
+    // Insert user and retrieve their ID
     const userId = await addUser(db, user.name, user.team, user.email_id);
 
-    // Insert the user-tool relationship into the 'user_tools' table
+    // Insert tool details linked to the user
     await addUserTool(db, userId, tool.tool_id, tool.access_level, tool.tool_owner, tool.ms_status);
 
     await db.end();
