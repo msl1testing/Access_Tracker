@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 const AddEntryPage = () => {
-  const [user, setUser] = useState({ name: '', team: '' });
+  const [user, setUser] = useState({ name: '', team: '', email_id: '' });
   const [tool, setTool] = useState({ tool_id: '', access_level: '', tool_owner: '', ms_status: 'NA' });
   const router = useRouter();
 
@@ -50,6 +50,10 @@ const AddEntryPage = () => {
         <label>
           Team:
           <input type="text" name="team" value={user.team} onChange={handleInputChange} required />
+        </label>
+        <label>
+          Email:
+          <input type="email" name="email_id" value={user.email_id} onChange={handleInputChange} required />
         </label>
 
         <h3>Tool Details</h3>

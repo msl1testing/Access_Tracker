@@ -3,6 +3,7 @@ export const fetchUserTools = `
   SELECT 
         users.name AS user_name, 
         users.team AS team_name,
+        users.email_id,
         tools.tool_name,
         user_tools.access_level,
         user_tools.tool_owner,
@@ -14,11 +15,12 @@ export const fetchUserTools = `
 `;
 
 // Insert a new user into the users table
-export const addUser = async (db, name, team) => {
-  const query = 'INSERT INTO users (name, team) VALUES (?, ?)';
-  const [result] = await db.execute(query, [name, team]);
+export const addUser = async (db, name, team, email_id) => {
+  const query = 'INSERT INTO users (name, team, email_id) VALUES (?, ?, ?)';
+  const [result] = await db.execute(query, [name, team, email_id]);
   return result.insertId;  // Return the newly created user ID
 };
+
 // Query to delete user from users table
 export const deleteUser = `
   DELETE FROM users WHERE user_id = ?;
@@ -38,7 +40,7 @@ export const addUserTool = async (db, userId, toolId, accessLevel, toolOwner, ms
   await db.execute(query, [userId, toolId, accessLevel, toolOwner, msStatus]);
 };
 
-
+// Fetch all users
 export const fetchUsers = `
   SELECT 
     user_id,
