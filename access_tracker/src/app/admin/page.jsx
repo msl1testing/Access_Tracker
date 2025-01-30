@@ -4,7 +4,59 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'; // Import useRouter for navigation
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 
-// Modal for confirming the delete action
+// Modal for authentication
+const AuthModal = ({ onAuthenticate, onClose, errorMessage }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (username && password) {
+      onAuthenticate(username, password);
+    }
+  };
+
+  return (
+    <div className="modal-backdrop">
+      <div className="modal-content">
+        <h2>Admin Access</h2>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>
+              Username:
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
+            </label>
+          </div>
+          <div>
+            <label>
+              Password:
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </label>
+          </div>
+          {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+          <div>
+            <button type="submit">Login</button>
+            <button type="button" onClick={onClose}>
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+// Confirm delete modal
 const ConfirmDeleteModal = ({ isOpen, onClose, onConfirm }) => {
   if (!isOpen) return null;
 
@@ -28,23 +80,41 @@ export default function AdminPage() {
   const [users, setUsers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userIdToDelete, setUserIdToDelete] = useState(null);
-  const router = useRouter(); // Initialize useRouter
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const router = useRouter();
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch('/api/admin');
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        const data = await response.json();
-        setUsers(data);
-      } catch (error) {
-        console.error('Error fetching users:', error);
-      }
+  // Authentication function
+  const authenticate = (enteredUsername, enteredPassword) => {
+    const validUsername = 'admin';
+    const validPassword = '12345678';
+
+    if (enteredUsername === validUsername && enteredPassword === validPassword) {
+      setIsAuthenticated(true);
+      setIsModalOpen(false); // Close the authentication modal after successful login
+    } else {
+      setErrorMessage('Authentication failed. Access restricted.');
     }
-    fetchData();
-  }, []);
+  };
+
+  // Fetch users if authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      async function fetchData() {
+        try {
+          const response = await fetch('/api/admin');
+          if (!response.ok) {
+            throw new Error('Failed to fetch data');
+          }
+          const data = await response.json();
+          setUsers(data);
+        } catch (error) {
+          console.error('Error fetching users:', error);
+        }
+      }
+      fetchData();
+    }
+  }, [isAuthenticated]);
 
   // Function to handle delete user
   const handleDelete = async () => {
@@ -57,7 +127,6 @@ export default function AdminPage() {
         throw new Error('Failed to delete user');
       }
 
-      // Filter out the deleted user from the UI
       setUsers(users.filter((user) => user.user_id !== userIdToDelete));
       alert('User deleted successfully');
     } catch (error) {
@@ -80,19 +149,32 @@ export default function AdminPage() {
     setUserIdToDelete(null);
   };
 
+  // If not authenticated, show the authentication modal
+  if (!isAuthenticated) {
+    return <AuthModal onAuthenticate={authenticate} onClose={() => setIsModalOpen(false)} errorMessage={errorMessage} />;
+  }
+
   return (
     <div className="body">
-      {/* Header with Add User Button */}
-      <div className="header">
+<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h1>Admin Page</h1>
-        <button onClick={handleAddUserClick} className="add-user-button">
+        <button
+          style={{
+            padding: '10px 20px',
+            backgroundColor: '#007BFF',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer',
+          }}
+          onClick={handleAddUserClick} // Call the function to navigate
+        >
           Add User
         </button>
       </div>
 
-      {/* Table */}
-      <div className="table">
-        <table>
+      <div className="table" style={{ marginTop: '20px' }}>
+        <table border="1" style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
               <th>Name</th>
@@ -127,7 +209,6 @@ export default function AdminPage() {
         </table>
       </div>
 
-      {/* Confirmation Modal */}
       <ConfirmDeleteModal
         isOpen={isModalOpen}
         onClose={closeDeleteModal}
