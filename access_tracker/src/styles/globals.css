@@ -33,7 +33,7 @@ form input {
   box-sizing: border-box;
 }
 
-form button {
+button {
   padding: 10px 20px;
   background-color: #3498db;
   color: white;
@@ -43,7 +43,7 @@ form button {
   font-size: 1rem;
 }
 
-form button:hover {
+button:hover {
   background-color: #2980b9;
 }
 
@@ -144,4 +144,41 @@ tr:hover {
 .modal-content .button-container button {
   width: 48%; /* Make each button occupy almost half of the width */
   margin-bottom: 0; /* Remove extra bottom margin */
+}
+/* Modal backdrop (darkened and blurred background) */
+.modal-backdrop {
+  position: fixed; /* Fix the modal in place on the screen */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  backdrop-filter: blur(5px); /* Apply the blur effect to the background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it's above other content */
+  overflow: hidden; /* Prevent scrolling */
+}
+
+/* Confirm button */
+.modal-button-confirm {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+/* Cancel button */
+.modal-button-cancel {
+  background-color: #ddd;
+  color: black;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 5px;
 }
