@@ -180,7 +180,6 @@ export default function AdminPage() {
             <tr>
               <th>Name</th>
               <th>Team Name</th>
-              <th>Email ID</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -190,7 +189,6 @@ export default function AdminPage() {
                 <tr key={index}>
                   <td>{user.name}</td>
                   <td>{user.team}</td>
-                  <td>{user.email_id}</td>
                   <td>
                     <button>
                       <FaEdit className="icon" />
