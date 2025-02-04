@@ -7,6 +7,7 @@ export const fetchUserTools = `
         tools.tool_name,
         user_tools.access_level,
         user_tools.client,
+        user_tools.access_group,
         user_tools.ms_status
   FROM user_tools
   JOIN users ON user_tools.user_id = users.user_id
@@ -32,12 +33,12 @@ export const deleteUserTools = `
 `;
 
 // Insert a new entry into the user_tools table
-export const addUserTool = async (db, userId, toolId, accessLevel, client, msStatus) => {
+export const addUserTool = async (db, userId, toolId, accessLevel, client, accessGroup, msStatus) => {
   const query = `
-    INSERT INTO user_tools (user_id, tool_id, access_level, client, ms_status)
+    INSERT INTO user_tools (user_id, tool_id, access_level, client, access_group, ms_status)
     VALUES (?, ?, ?, ?, ?)
   `;
-  await db.execute(query, [userId, toolId, accessLevel, client, msStatus]);
+  await db.execute(query, [userId, toolId, accessLevel, client,accessGroup, msStatus]);
 };
 
 // Fetch all users

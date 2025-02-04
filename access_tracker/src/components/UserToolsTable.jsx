@@ -12,7 +12,8 @@ export default function UserToolsTable({ data, searchTerms, setSearchTerms }) {
       item.team_name.toLowerCase().includes(searchTerms.team.toLowerCase()) &&
       item.user_name.toLowerCase().includes(searchTerms.user.toLowerCase()) &&
       item.tool_name.toLowerCase().includes(searchTerms.tool.toLowerCase()) &&
-      item.client.toLowerCase().includes(searchTerms.client.toLowerCase())
+      item.client.toLowerCase().includes(searchTerms.client.toLowerCase()) &&
+      item.access_group.toLowerCase().includes(searchTerms.client.toLowerCase())
     );
     setFilteredUserTools(results);
   }, [searchTerms, data]);
@@ -107,6 +108,21 @@ export default function UserToolsTable({ data, searchTerms, setSearchTerms }) {
             transition: 'border-color 0.3s',
           }}
         />
+        <input
+        type="text"
+        placeholder="Search by access group"
+        value={searchTerms.access_group}
+        onChange={(e) => setSearchTerms((prev) => ({ ...prev, access_group: e.target.value }))}
+        style={{
+          padding: '10px',
+          borderRadius: '5px',
+          border: '1px solid #ccc',
+          width: '200px',
+          fontSize: '14px',
+          outline: 'none',
+          transition: 'border-color 0.3s',
+        }}
+      />
       </div>
 
       {/* Table */}
@@ -119,6 +135,7 @@ export default function UserToolsTable({ data, searchTerms, setSearchTerms }) {
               <th>Tool Name</th>
               <th>Access Level</th>
               <th>Client</th>
+              <th>Access Group</th>
               <th>MS SOW Status</th>
             </tr>
           </thead>
@@ -131,6 +148,7 @@ export default function UserToolsTable({ data, searchTerms, setSearchTerms }) {
                   <td>{item.tool_name}</td>
                   <td>{item.access_level}</td>
                   <td>{item.client}</td>
+                  <td>{item.access_group}</td>
                   <td>{item.ms_status}</td>
                 </tr>
               ))
