@@ -12,7 +12,7 @@ export default function UserToolsTable({ data, searchTerms, setSearchTerms }) {
       item.team_name.toLowerCase().includes(searchTerms.team.toLowerCase()) &&
       item.user_name.toLowerCase().includes(searchTerms.user.toLowerCase()) &&
       item.tool_name.toLowerCase().includes(searchTerms.tool.toLowerCase()) &&
-      item.tool_owner.toLowerCase().includes(searchTerms.client.toLowerCase())
+      item.client.toLowerCase().includes(searchTerms.client.toLowerCase())
     );
     setFilteredUserTools(results);
   }, [searchTerms, data]);
@@ -119,7 +119,7 @@ export default function UserToolsTable({ data, searchTerms, setSearchTerms }) {
               <th>Tool Name</th>
               <th>Access Level</th>
               <th>Client</th>
-              <th>MS Status</th>
+              <th>MS SOW Status</th>
             </tr>
           </thead>
           <tbody>
@@ -130,7 +130,7 @@ export default function UserToolsTable({ data, searchTerms, setSearchTerms }) {
                   <td>{item.user_name}</td>
                   <td>{item.tool_name}</td>
                   <td>{item.access_level}</td>
-                  <td>{item.tool_owner}</td>
+                  <td>{item.client}</td>
                   <td>{item.ms_status}</td>
                 </tr>
               ))

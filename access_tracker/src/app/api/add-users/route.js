@@ -16,7 +16,7 @@ export async function POST(req) {
     const userId = await addUser(db, user.name, user.team, user.email_id);
 
     // Insert tool details linked to the user
-    await addUserTool(db, userId, tool.tool_id, tool.access_level, tool.tool_owner, tool.ms_status);
+    await addUserTool(db, userId, tool.tool_id, tool.access_level, tool.client, tool.ms_status);
 
     await db.end();
 
