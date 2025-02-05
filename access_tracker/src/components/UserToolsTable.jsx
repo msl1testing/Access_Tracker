@@ -13,7 +13,7 @@ export default function UserToolsTable({ data, searchTerms, setSearchTerms }) {
       item.user_name.toLowerCase().includes(searchTerms.user.toLowerCase()) &&
       item.tool_name.toLowerCase().includes(searchTerms.tool.toLowerCase()) &&
       item.client.toLowerCase().includes(searchTerms.client.toLowerCase()) &&
-      item.access_group.toLowerCase().includes(searchTerms.client.toLowerCase())
+      item.access_group.toLowerCase().includes(searchTerms.access_group.toLowerCase())
     );
     setFilteredUserTools(results);
   }, [searchTerms, data]);
