@@ -19,7 +19,6 @@ const EditUserPage = () => {
     }
   }, [userId]);
 
-  // Fetch user details
   const fetchUserData = async () => {
     try {
       const response = await fetch(`/api/users/${userId}`);
@@ -31,7 +30,6 @@ const EditUserPage = () => {
     }
   };
 
-  // Fetch user-tools details
   const fetchUserToolsData = async () => {
     try {
       const response = await fetch(`/api/user-tools/${userId}`);
@@ -42,19 +40,17 @@ const EditUserPage = () => {
       console.error('Error fetching user-tools:', error);
     }
   };
-  
 
-  // Handle input changes for user details
   const handleUserChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
-  // Handle input changes for tool details
-  const handleToolChange = (e) => {
-    setNewTool({ ...newTool, [e.target.name]: e.target.value });
+  const handleToolChange = (index, field, value) => {
+    const updatedTools = [...userTools];
+    updatedTools[index][field] = value;
+    setUserTools(updatedTools);
   };
 
-  // Update user details
   const handleUserUpdate = async () => {
     try {
       const response = await fetch(`/api/users/${userId}`, {
@@ -71,17 +67,32 @@ const EditUserPage = () => {
     }
   };
 
-  // Add new user-tools entry
+  const handleToolUpdate = async (tool) => {
+    try {
+      const response = await fetch(`/api/user-tools/${userId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(tool),
+      });
+
+      if (!response.ok) throw new Error('Failed to update user-tool entry');
+      alert('User-Tool entry updated successfully!');
+      fetchUserToolsData();
+    } catch (error) {
+      console.error('Error updating user-tool entry:', error);
+    }
+  };
+
   const handleAddUserTool = async () => {
     try {
-      const response = await fetch(`/api/user-tools/${userId}`, { // ✅ Include userId in URL
+      const response = await fetch(`/api/user-tools/${userId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tool_id: newTool.tool_id, access_level: newTool.access_level, client: newTool.client, ms_status: newTool.ms_status, access_group: newTool.access_group }),
+        body: JSON.stringify(newTool),
       });
-  
+
       if (!response.ok) throw new Error('Failed to add user-tool entry');
-      
+
       alert('User-Tool entry added successfully!');
       fetchUserToolsData();
       setNewTool({ tool_id: '', access_level: '', client: '', ms_status: '', access_group: '' });
@@ -89,7 +100,6 @@ const EditUserPage = () => {
       console.error('Error adding user-tool entry:', error);
     }
   };
-  
 
   return (
     <div className="body">
@@ -112,6 +122,7 @@ const EditUserPage = () => {
               <th>Client</th>
               <th>MS Status</th>
               <th>Access Group</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -119,10 +130,21 @@ const EditUserPage = () => {
               <tr key={index}>
                 <td>{tool.tool_id}</td>
                 <td>{tool.tool_name}</td>
-                <td>{tool.access_level}</td>
-                <td>{tool.client}</td>
-                <td>{tool.ms_status}</td>
-                <td>{tool.access_group}</td>
+                <td>
+                  <input type="text" value={tool.access_level} onChange={(e) => handleToolChange(index, 'access_level', e.target.value)} />
+                </td>
+                <td>
+                  <input type="text" value={tool.client} onChange={(e) => handleToolChange(index, 'client', e.target.value)} />
+                </td>
+                <td>
+                  <input type="text" value={tool.ms_status} onChange={(e) => handleToolChange(index, 'ms_status', e.target.value)} />
+                </td>
+                <td>
+                  <input type="text" value={tool.access_group} onChange={(e) => handleToolChange(index, 'access_group', e.target.value)} />
+                </td>
+                <td>
+                  <button onClick={() => handleToolUpdate(tool)}>Update</button>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -132,11 +154,11 @@ const EditUserPage = () => {
       )}
 
       <h3>Add New Tool</h3>
-      <label>Tool ID: <input type="number" name="tool_id" value={newTool.tool_id} onChange={handleToolChange} /></label>
-      <label>Access Level: <input type="text" name="access_level" value={newTool.access_level} onChange={handleToolChange} /></label>
-      <label>Client: <input type="text" name="client" value={newTool.client} onChange={handleToolChange} /></label>
-      <label>MS Status: <input type="text" name="ms_status" value={newTool.ms_status} onChange={handleToolChange} /></label>
-      <label>Access Group: <input type="text" name="access_group" value={newTool.access_group} onChange={handleToolChange} /></label>
+      <label>Tool ID: <input type="number" name="tool_id" value={newTool.tool_id} onChange={(e) => setNewTool({ ...newTool, tool_id: e.target.value })} /></label>
+      <label>Access Level: <input type="text" name="access_level" value={newTool.access_level} onChange={(e) => setNewTool({ ...newTool, access_level: e.target.value })} /></label>
+      <label>Client: <input type="text" name="client" value={newTool.client} onChange={(e) => setNewTool({ ...newTool, client: e.target.value })} /></label>
+      <label>MS Status: <input type="text" name="ms_status" value={newTool.ms_status} onChange={(e) => setNewTool({ ...newTool, ms_status: e.target.value })} /></label>
+      <label>Access Group: <input type="text" name="access_group" value={newTool.access_group} onChange={(e) => setNewTool({ ...newTool, access_group: e.target.value })} /></label>
       <button onClick={handleAddUserTool}>Add Tool</button>
     </div>
   );
