@@ -213,7 +213,7 @@ export default function AdminPage() {
                   <td>{user.team}</td>
                   <td>{user.email_id}</td>
                   <td>
-                    <button style={{ marginRight: '10px' }}>
+                    <button onClick={() => router.push(`/edit-users?user_id=${user.user_id}`)}>
                       <FaEdit className="icon" />
                     </button>
                     <button onClick={() => openDeleteModal(user.user_id)}>
