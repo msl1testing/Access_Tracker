@@ -39,3 +39,11 @@ export const fetchUsers = `
   FROM users
   ORDER BY name;
 `;
+
+export const fetchClientTools = `
+  SELECT DISTINCT user_tools.client, tools.tool_name
+  FROM user_tools
+  JOIN tools ON user_tools.tool_id = tools.tool_id
+  WHERE user_tools.client IS NOT NULL
+  ORDER BY user_tools.client, tools.tool_name;
+`;
