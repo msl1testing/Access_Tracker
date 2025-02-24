@@ -101,16 +101,31 @@ const EditUserPage = () => {
     }
   };
 
+
   return (
-    <div className="body">
-      <h1>Edit User</h1>
+    <div style={styles.container}>
+      <h1 style={styles.heading}>Edit User</h1>
 
-      <h3>User Details</h3>
-      <label>Name: <input type="text" name="name" value={user.name} onChange={handleUserChange} /></label>
-      <label>Team: <input type="text" name="team" value={user.team} onChange={handleUserChange} /></label>
-      <label>Email: <input type="email" name="email_id" value={user.email_id} onChange={handleUserChange} /></label>
-      <button onClick={handleUserUpdate}>Update User</button>
+      {/* User Details Section */}
+      <div style={styles.card}>
+        <h3 style={styles.subHeading}>User Details</h3>
+        <div style={styles.formGroup}>
+          <label>Name:</label>
+          <input type="text" name="name" value={user.name} onChange={handleUserChange} style={styles.input} />
+        </div>
+        <div style={styles.formGroup}>
+          <label>Team:</label>
+          <input type="text" name="team" value={user.team} onChange={handleUserChange} style={styles.input} />
+        </div>
+        <div style={styles.formGroup}>
+          <label>Email:</label>
+          <input type="email" name="email_id" value={user.email_id} onChange={handleUserChange} style={styles.input} />
+        </div>
+        <button onClick={handleUserUpdate} style={styles.button}>Update User</button>
+      </div>
 
+      {/* User-Tools Details Section */}
+      <div style={styles.card}>
       <h3>User-Tools Details</h3>
       {userTools.length > 0 ? (
         <table border="1">
@@ -152,16 +167,115 @@ const EditUserPage = () => {
       ) : (
         <p>No tools assigned.</p>
       )}
+      </div>
 
-      <h3>Add New Tool</h3>
-      <label>Tool ID: <input type="number" name="tool_id" value={newTool.tool_id} onChange={(e) => setNewTool({ ...newTool, tool_id: e.target.value })} /></label>
-      <label>Access Level: <input type="text" name="access_level" value={newTool.access_level} onChange={(e) => setNewTool({ ...newTool, access_level: e.target.value })} /></label>
-      <label>Client: <input type="text" name="client" value={newTool.client} onChange={(e) => setNewTool({ ...newTool, client: e.target.value })} /></label>
-      <label>MS Status: <input type="text" name="ms_status" value={newTool.ms_status} onChange={(e) => setNewTool({ ...newTool, ms_status: e.target.value })} /></label>
-      <label>Access Group: <input type="text" name="access_group" value={newTool.access_group} onChange={(e) => setNewTool({ ...newTool, access_group: e.target.value })} /></label>
-      <button onClick={handleAddUserTool}>Add Tool</button>
+      {/* Add New Tool Section */}
+      <div style={styles.card}>
+        <h3 style={styles.subHeading}>Add New Tool</h3>
+        <div style={styles.formGroup}>
+          <label>Tool ID:</label>
+          <input type="number" name="tool_id" value={newTool.tool_id} onChange={(e) => setNewTool({ ...newTool, tool_id: e.target.value })} style={styles.input} />
+        </div>
+        <div style={styles.formGroup}>
+          <label>Access Level:</label>
+          <input type="text" name="access_level" value={newTool.access_level} onChange={(e) => setNewTool({ ...newTool, access_level: e.target.value })} style={styles.input} />
+        </div>
+        <div style={styles.formGroup}>
+          <label>Client:</label>
+          <input type="text" name="client" value={newTool.client} onChange={(e) => setNewTool({ ...newTool, client: e.target.value })} style={styles.input} />
+        </div>
+        <div style={styles.formGroup}>
+          <label>MS Status:</label>
+          <input type="text" name="ms_status" value={newTool.ms_status} onChange={(e) => setNewTool({ ...newTool, ms_status: e.target.value })} style={styles.input} />
+        </div>
+        <div style={styles.formGroup}>
+          <label>Access Group:</label>
+          <input type="text" name="access_group" value={newTool.access_group} onChange={(e) => setNewTool({ ...newTool, access_group: e.target.value })} style={styles.input} />
+        </div>
+        <button onClick={handleAddUserTool} style={styles.button}>Add Tool</button>
+      </div>
     </div>
   );
 };
+
+const styles = {
+  container: {
+    maxWidth: '1200px',
+    margin: '20px auto',
+    fontFamily: 'Arial, sans-serif',
+    padding: '0 20px',
+  },
+  heading: {
+    textAlign: 'center',
+    fontSize: '28px',
+  },
+  card: {
+    background: '#fff',
+    padding: '20px',
+    margin: '20px 0',
+    borderRadius: '8px',
+    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+  },
+  subHeading: {
+    borderBottom: '2px solid #ddd',
+    paddingBottom: '5px',
+    marginBottom: '10px',
+  },
+  formGroup: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginBottom: '15px',
+  },
+  input: {
+    padding: '10px',
+    border: '1px solid #ddd',
+    borderRadius: '5px',
+    width: '90%',
+  },
+  button: {
+    padding: '10px',
+    backgroundColor: '#007BFF',
+    color: '#fff',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    marginTop: '10px',
+    width: '100%',
+  },
+  tableContainer: {
+    overflowX: 'auto', // Allows table scrolling on small screens
+  },
+  table: {
+    width: '100%',
+    borderCollapse: 'collapse',
+  },
+  tableHeader: {
+    backgroundColor: '#f4f4f4',
+  },
+  deleteButton: {
+    backgroundColor: 'red',
+    color: 'white',
+    padding: '5px 10px',
+    borderRadius: '5px',
+    cursor: 'pointer',
+  },
+  '@media (max-width: 768px)': {
+    heading: {
+      fontSize: '24px',
+    },
+    card: {
+      padding: '15px',
+    },
+    input: {
+      padding: '8px',
+    },
+    button: {
+      padding: '8px',
+    },
+    table: {
+      fontSize: '14px',
+    },
+  },
+};
+
 
 export default EditUserPage;
