@@ -1,11 +1,21 @@
 import mysql from "mysql2/promise";
-import { addUser, addUserTool } from "@/lib/queries";  
+import { addUser } from "@/lib/queries";
 
 export async function POST(req) {
-  try {
-    const { user, tool } = await req.json();
+  let db;
 
-    const db = await mysql.createConnection({
+  try {
+    const { user } = await req.json();
+
+    // Validate input
+    if (!user?.name || !user?.team || !user?.email_id) {
+      return new Response(
+        JSON.stringify({ error: "Missing required user fields" }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    db = await mysql.createConnection({
       host: process.env.DB_HOST,
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
@@ -14,14 +24,10 @@ export async function POST(req) {
 
     // Insert user and retrieve their ID
     const userId = await addUser(db, user.name, user.team, user.email_id);
-
-    // Insert tool details linked to the user
-    await addUserTool(db, userId, tool.tool_id, tool.access_level, tool.client, tool.ms_status);
-
-    await db.end();
+    console.log("New User ID:", userId);
 
     return new Response(
-      JSON.stringify({ message: "Entry added successfully!" }),
+      JSON.stringify({ message: "User added successfully!" }),
       {
         status: 200,
         headers: { "Content-Type": "application/json" },
@@ -30,11 +36,15 @@ export async function POST(req) {
   } catch (error) {
     console.error("Database error:", error);
     return new Response(
-      JSON.stringify({ error: "Database query failed" }),
+      JSON.stringify({ error: "Database query failed", details: error.message }),
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
       }
     );
+  } finally {
+    if (db) {
+      await db.end();
+    }
   }
 }

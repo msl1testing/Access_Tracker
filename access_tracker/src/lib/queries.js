@@ -17,29 +17,17 @@ export const fetchUserTools = `
 
 // Insert a new user into the users table
 export const addUser = async (db, name, team, email_id) => {
-  const query = 'INSERT INTO users (name, team, email_id) VALUES (?, ?, ?)';
+  const query = `INSERT INTO users (name, team, email_id) VALUES (?, ?, ?)`;
   const [result] = await db.execute(query, [name, team, email_id]);
   return result.insertId;  // Return the newly created user ID
 };
 
 // Query to delete user from users table
-export const deleteUser = `
-  DELETE FROM users WHERE user_id = ?;
-`;
+export const deleteUser = `DELETE FROM users WHERE user_id = ?;`;
 
-// Query to delete related user_tools entry (if necessary)
-export const deleteUserTools = `
-  DELETE FROM user_tools WHERE user_id = ?;
-`;
+// Query to delete related user_tools entry
+export const deleteUserTools = `DELETE FROM user_tools WHERE user_id = ?;`;
 
-// Insert a new entry into the user_tools table
-export const addUserTool = async (db, userId, toolId, accessLevel, client, accessGroup, msStatus) => {
-  const query = `
-    INSERT INTO user_tools (user_id, tool_id, access_level, client, access_group, ms_status)
-    VALUES (?, ?, ?, ?, ?)
-  `;
-  await db.execute(query, [userId, toolId, accessLevel, client,accessGroup, msStatus]);
-};
 
 // Fetch all users
 export const fetchUsers = `
