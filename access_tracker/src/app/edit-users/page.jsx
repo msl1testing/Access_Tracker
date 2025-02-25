@@ -210,7 +210,7 @@ const EditUserPage = () => {
                 <td>{tool.ms_status}</td>
                 <td>{tool.access_group}</td>
                 <td>
-                  <button onClick={() => handleToolUpdate(tool)}>
+                  <button onClick={() => handleToolUpdate(tool)} style={{ marginRight: "10px" }}>
                   <FaEdit className="icon" />
                   </button>
                   <button onClick={() => handleToolDelete(tool.tool_id)}>
