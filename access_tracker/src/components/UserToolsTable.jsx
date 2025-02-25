@@ -28,6 +28,10 @@ export default function UserToolsTable({ data = [], searchTerms, setSearchTerms 
     router.push('/admin'); 
   };
 
+  const handleToolsClick = () => {
+    router.push('/tools'); 
+  };
+
   const exportCSV = () => {
     const csvContent = [
       ['Team Name', 'User Name', 'Tool Name', 'Access Level', 'Client', 'Access Group', 'MS SOW Status'],
@@ -91,6 +95,19 @@ export default function UserToolsTable({ data = [], searchTerms, setSearchTerms 
             onClick={handleAdminClick}
           >
             Admin
+          </button>
+          <button
+            style={{
+              padding: '10px 20px',
+              backgroundColor: '#3498db',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+            }}
+            onClick={handleToolsClick}
+          >
+            Tools
           </button>
           {/* Export Button */}
           <div style={{ position: 'relative' }}>

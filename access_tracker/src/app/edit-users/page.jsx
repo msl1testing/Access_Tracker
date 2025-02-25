@@ -12,7 +12,14 @@ const EditUserPage = () => {
   const [user, setUser] = useState({ name: '', team: '', email_id: '' });
   const [userTools, setUserTools] = useState([]);
   const [newTool, setNewTool] = useState({ tool_id: '', access_level: '', client: '', ms_status: '', access_group: '' });
+  
+  const handleHomeClick = () => {
+    router.push('/user-tools'); // Navigate to the add-users page
+  };
 
+  const handleAdminClick = () => {
+    router.push('/admin'); // Navigate to the add-users page
+  };
   useEffect(() => {
     if (userId) {
       fetchUserData();
@@ -123,7 +130,39 @@ const EditUserPage = () => {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.heading}>Edit User</h1>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+  <div style={{ flex: 1, textAlign: 'center' }}>
+    <h1>Edit User</h1>
+  </div>
+  <div style={{ display: 'flex', gap: '10px' }}>
+    <button
+      style={{
+        padding: '10px 20px',
+        backgroundColor: '#3498db',
+        color: '#fff',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+      }}
+      onClick={handleAdminClick} // Call the function to navigate
+    >
+      Admin
+    </button>
+    <button
+      style={{
+        padding: '10px 20px',
+        backgroundColor: '#3498db',
+        color: '#fff',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+      }}
+      onClick={handleHomeClick} // Call the function to navigate
+    >
+      Home
+    </button>
+  </div>
+</div>
 
       {/* User Details Section */}
       <div style={styles.card}>
@@ -252,7 +291,7 @@ const styles = {
   },
   button: {
     padding: '10px',
-    backgroundColor: '#007BFF',
+    backgroundColor: '#3498db',
     color: '#fff',
     borderRadius: '5px',
     cursor: 'pointer',
