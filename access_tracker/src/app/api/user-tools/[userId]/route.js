@@ -131,10 +131,11 @@ export async function PUT(req, context) {
 
     const [result] = await db.execute(
       `UPDATE user_tools 
-       SET access_level = ?, client = ?, ms_status = ?, access_group = ? 
-       WHERE user_id = ? AND tool_id = ?`,
-      [access_level, client, ms_status, access_group, userId, tool_id]
+       SET access_level = ?  
+       WHERE client = ? AND user_id = ? AND tool_id = ?`,
+      [access_level, client, userId, tool_id]
     );
+    
 
     await db.end();
 
@@ -149,3 +150,42 @@ export async function PUT(req, context) {
   }
 }
 
+export async function DELETE(req, context) {
+  const params = await context.params;
+  const userId = params?.userId;
+
+  if (!userId) {
+    return new Response(JSON.stringify({ error: "User ID is required" }), { status: 400 });
+  }
+
+  try {
+    const { tool_id } = await req.json();
+
+    if (!tool_id) {
+      return new Response(JSON.stringify({ error: "Tool ID is required" }), { status: 400 });
+    }
+
+    const db = await mysql.createConnection({
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+    });
+
+    const [result] = await db.execute(
+      `DELETE FROM user_tools WHERE user_id = ? AND tool_id = ?`,
+      [userId, tool_id]
+    );
+
+    await db.end();
+
+    if (result.affectedRows === 0) {
+      return new Response(JSON.stringify({ error: "No matching entry found" }), { status: 404 });
+    }
+
+    return new Response(JSON.stringify({ message: "User-tool entry deleted successfully" }), { status: 200 });
+  } catch (error) {
+    console.error("Error deleting user-tool entry:", error);
+    return new Response(JSON.stringify({ error: "Internal Server Error" }), { status: 500 });
+  }
+}

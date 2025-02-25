@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 
 const EditUserPage = () => {
   const searchParams = useSearchParams();
@@ -82,7 +83,25 @@ const EditUserPage = () => {
       console.error('Error updating user-tool entry:', error);
     }
   };
-
+  const handleToolDelete = async (toolId) => {
+    if (!window.confirm("Are you sure you want to delete this tool?")) return;
+  
+    try {
+      const response = await fetch(`/api/user-tools/${userId}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tool_id: toolId }),
+      });
+  
+      if (!response.ok) throw new Error("Failed to delete user-tool entry");
+  
+      alert("User-Tool entry deleted successfully!");
+      fetchUserToolsData(); // Refresh the table
+    } catch (error) {
+      console.error("Error deleting user-tool entry:", error);
+    }
+  };
+  
   const handleAddUserTool = async () => {
     try {
       const response = await fetch(`/api/user-tools/${userId}`, {
@@ -148,17 +167,16 @@ const EditUserPage = () => {
                 <td>
                   <input type="text" value={tool.access_level} onChange={(e) => handleToolChange(index, 'access_level', e.target.value)} />
                 </td>
+                <td>{tool.client}</td>
+                <td>{tool.ms_status}</td>
+                <td>{tool.access_group}</td>
                 <td>
-                  <input type="text" value={tool.client} onChange={(e) => handleToolChange(index, 'client', e.target.value)} />
-                </td>
-                <td>
-                  <input type="text" value={tool.ms_status} onChange={(e) => handleToolChange(index, 'ms_status', e.target.value)} />
-                </td>
-                <td>
-                  <input type="text" value={tool.access_group} onChange={(e) => handleToolChange(index, 'access_group', e.target.value)} />
-                </td>
-                <td>
-                  <button onClick={() => handleToolUpdate(tool)}>Update</button>
+                  <button onClick={() => handleToolUpdate(tool)}>
+                  <FaEdit className="icon" />
+                  </button>
+                  <button onClick={() => handleToolDelete(tool.tool_id)}>
+                  <FaTrashAlt className="icon" />
+                  </button>
                 </td>
               </tr>
             ))}
