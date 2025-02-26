@@ -12,7 +12,8 @@ const EditUserPage = () => {
   const [user, setUser] = useState({ name: '', team: '', email_id: '' });
   const [userTools, setUserTools] = useState([]);
   const [newTool, setNewTool] = useState({ tool_id: '', access_level: '', client: '', ms_status: '', access_group: '' });
-  
+  const [availableTools, setAvailableTools] = useState([]);
+
   const handleHomeClick = () => {
     router.push('/user-tools'); // Navigate to the add-users page
   };
@@ -48,7 +49,17 @@ const EditUserPage = () => {
       console.error('Error fetching user-tools:', error);
     }
   };
-
+  const fetchAvailableTools = async () => {
+    try {
+      const response = await fetch('/api/availabletools'); // Fetch available tools
+      if (!response.ok) throw new Error('Failed to fetch available tools');
+      const data = await response.json();
+      setAvailableTools(data);
+    } catch (error) {
+      console.error('Error fetching available tools:', error);
+    }
+  };
+  
   const handleUserChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
@@ -108,6 +119,11 @@ const EditUserPage = () => {
       console.error("Error deleting user-tool entry:", error);
     }
   };
+  useEffect(() => {
+    if (userId) {
+      fetchAvailableTools(); // Fetch the list of available tools
+    }
+  }, [userId]);
   
   const handleAddUserTool = async () => {
     try {
@@ -229,9 +245,23 @@ const EditUserPage = () => {
       {/* Add New Tool Section */}
       <div style={styles.card}>
         <h3 style={styles.subHeading}>Add New Tool</h3>
+
+        {/* Tool ID Dropdown */}
         <div style={styles.formGroup}>
           <label>Tool ID:</label>
-          <input type="number" name="tool_id" value={newTool.tool_id} onChange={(e) => setNewTool({ ...newTool, tool_id: e.target.value })} style={styles.input} />
+          <select 
+            name="tool_id" 
+            value={newTool.tool_id} 
+            onChange={(e) => setNewTool({ ...newTool, tool_id: e.target.value })} 
+            style={styles.input}
+          >
+            <option value="">Select a tool</option>
+            {availableTools.map((tool) => (
+              <option key={tool.tool_id} value={tool.tool_id}>
+                {tool.tool_id} - {tool.tool_name}
+              </option>
+            ))}
+          </select>
         </div>
         <div style={styles.formGroup}>
           <label>Access Level:</label>
