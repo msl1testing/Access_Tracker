@@ -1,5 +1,5 @@
 import mysql from "mysql2/promise";
-import { fetchClientTools } from "@/lib/queries";
+import { fetchClientTools, fetchToolClients } from "@/lib/queries";
 
 export async function GET() {
   let db;
@@ -12,25 +12,35 @@ export async function GET() {
       database: process.env.DB_NAME,
     });
 
-    const [rows] = await db.execute(fetchClientTools);
-    
-    // Group data by clients
+    const [clientRows] = await db.execute(fetchClientTools);
+    const [toolRows] = await db.execute(fetchToolClients);
+
+    // Format data for clients -> tools
     const clientTools = {};
-    rows.forEach(({ client, tool_name }) => {
+    clientRows.forEach(({ client, tool_name }) => {
       if (!clientTools[client]) {
         clientTools[client] = [];
       }
       clientTools[client].push(tool_name);
     });
 
-    return new Response(JSON.stringify(clientTools), {
+    // Format data for tools -> clients
+    const toolClients = {};
+    toolRows.forEach(({ tool_name, client }) => {
+      if (!toolClients[tool_name]) {
+        toolClients[tool_name] = [];
+      }
+      toolClients[tool_name].push(client);
+    });
+
+    return new Response(JSON.stringify({ clientTools, toolClients }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
 
   } catch (error) {
     console.error("Database error:", error);
-    return new Response(JSON.stringify({ error: "Database query failed", details: error.message }), {
+    return new Response(JSON.stringify({ error: "Database query failed" }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
     });
@@ -38,3 +48,5 @@ export async function GET() {
     if (db) await db.end();
   }
 }
+
+
