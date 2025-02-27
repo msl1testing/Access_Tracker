@@ -13,6 +13,8 @@ const EditUserPage = () => {
   const [userTools, setUserTools] = useState([]);
   const [newTool, setNewTool] = useState({ tool_id: '', access_level: '', client: '', ms_status: '', access_group: '' });
   const [availableTools, setAvailableTools] = useState([]);
+  const [accessLevels, setAccessLevels] = useState([]);
+  const [selectedTool, setSelectedTool] = useState('');
 
   const handleHomeClick = () => {
     router.push('/user-tools'); // Navigate to the add-users page
@@ -60,6 +62,19 @@ const EditUserPage = () => {
     }
   };
   
+  const fetchAccessLevels = async (toolId) => {
+    if (!toolId) return;
+    try {
+      const response = await fetch(`/api/accesslevels?tool_id=${toolId}`);
+      if (!response.ok) throw new Error('Failed to fetch access levels');
+      const data = await response.json();
+      console.log('Access Levels:', data);  // Debugging
+      setAccessLevels(data);
+    } catch (error) {
+      console.error('Error fetching access levels:', error);
+    }
+  };
+
   const handleUserChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
@@ -119,30 +134,61 @@ const EditUserPage = () => {
       console.error("Error deleting user-tool entry:", error);
     }
   };
-  useEffect(() => {
-    if (userId) {
-      fetchAvailableTools(); // Fetch the list of available tools
-    }
-  }, [userId]);
-  
-  const handleAddUserTool = async () => {
-    try {
-      const response = await fetch(`/api/user-tools/${userId}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newTool),
-      });
 
-      if (!response.ok) throw new Error('Failed to add user-tool entry');
+  const handleNewToolChange = (e) => {
+    const toolId = e.target.value;
+    setSelectedTool(toolId);
+    console.log("Selected Tool ID:", toolId);
+    console.log("Updated newTool state:", { ...newTool, tool_id: toolId });
 
-      alert('User-Tool entry added successfully!');
-      fetchUserToolsData();
-      setNewTool({ tool_id: '', access_level: '', client: '', ms_status: '', access_group: '' });
-    } catch (error) {
-      console.error('Error adding user-tool entry:', error);
-    }
+    // ✅ Ensure tool_id is correctly set in newTool
+    setNewTool((prev) => ({ ...prev, tool_id: toolId }));
+    
+    setAccessLevels([]); // Reset access levels until new data is fetched
+    fetchAccessLevels(toolId); // Fetch new access levels for selected tool
   };
 
+// Fetch tools on page load
+useEffect(() => {
+  fetchAvailableTools();
+}, []);
+
+// Fetch access levels when tool is selected
+useEffect(() => {
+  if (selectedTool) {
+    fetchAccessLevels(selectedTool);
+  }
+}, [selectedTool]);
+
+const handleAddUserTool = async () => {
+  // ✅ Check if any field is empty
+  if (!newTool.tool_id || !newTool.access_level || !newTool.client || !newTool.ms_status || !newTool.access_group) {
+    alert("All fields are required!");
+    return; // Stop function execution if validation fails
+  }
+
+  try {
+    console.log("Submitting new tool:", newTool); // Debugging
+    const response = await fetch(`/api/user-tools/${userId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newTool),
+    });
+
+    if (!response.ok) throw new Error('Failed to add user-tool entry');
+
+    alert('User-Tool entry added successfully!');
+    fetchUserToolsData();
+
+    // ✅ Reset the form after successful submission
+    setNewTool({ tool_id: '', access_level: '', client: '', ms_status: '', access_group: '' });
+    setSelectedTool(''); // ✅ Reset the selected tool dropdown
+    setAccessLevels([]); // ✅ Reset access levels since no tool is selected
+  } catch (error) {
+    console.error('Error adding user-tool entry:', error);
+    alert("Failed to add user-tool entry. Please try again.");
+  }
+};
 
   return (
     <div style={styles.container}>
@@ -246,27 +292,38 @@ const EditUserPage = () => {
       <div style={styles.card}>
         <h3 style={styles.subHeading}>Add New Tool</h3>
 
-        {/* Tool ID Dropdown */}
+       {/* Tool Dropdown */}
+<div style={styles.formGroup}>
+  <label>Tool ID:</label>
+  <select value={selectedTool} onChange={handleNewToolChange} style={styles.input}>
+    <option value="">Select a tool</option>
+    {availableTools.length > 0 ? (
+      availableTools.map((tool) => (
+        <option key={tool.tool_id} value={tool.tool_id}>
+          {tool.tool_name} (ID: {tool.tool_id})
+        </option>
+      ))
+    ) : (
+      <option disabled>Loading tools...</option>
+    )}
+  </select>
+</div>
+
         <div style={styles.formGroup}>
-          <label>Tool ID:</label>
-          <select 
-            name="tool_id" 
-            value={newTool.tool_id} 
-            onChange={(e) => setNewTool({ ...newTool, tool_id: e.target.value })} 
-            style={styles.input}
-          >
-            <option value="">Select a tool</option>
-            {availableTools.map((tool) => (
-              <option key={tool.tool_id} value={tool.tool_id}>
-                {tool.tool_id} - {tool.tool_name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div style={styles.formGroup}>
-          <label>Access Level:</label>
-          <input type="text" name="access_level" value={newTool.access_level} onChange={(e) => setNewTool({ ...newTool, access_level: e.target.value })} style={styles.input} />
-        </div>
+  <label>Access Level:</label>
+  <select name="access_level" value={newTool.access_level} onChange={(e) => setNewTool({ ...newTool, access_level: e.target.value })} style={styles.input}>
+    <option value="">Select an access level</option>
+    {accessLevels.length > 0 ? (
+      accessLevels.map((level, index) => (
+        <option key={index} value={level.access_level}>
+          {level.access_level}
+        </option>
+      ))
+    ) : (
+      <option disabled>Select a tool first</option>
+    )}
+  </select>
+</div>
         <div style={styles.formGroup}>
           <label>Client:</label>
           <input type="text" name="client" value={newTool.client} onChange={(e) => setNewTool({ ...newTool, client: e.target.value })} style={styles.input} />
