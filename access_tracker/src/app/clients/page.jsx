@@ -5,29 +5,38 @@ import { useState, useEffect } from "react";
 export default function ClientToolsTable() {
   const [clientTools, setClientTools] = useState([]);
   const [searchTerms, setSearchTerms] = useState({ client: "", tool: "" });
-
   useEffect(() => {
     async function fetchData() {
       try {
         const res = await fetch("/api/tools");
         if (!res.ok) throw new Error("Failed to fetch data");
+  
         const data = await res.json();
-
-        // Convert object structure to an array of objects [{ client, tool }]
-        const formattedData = Object.entries(data).flatMap(([client, tools]) =>
-          tools.map((tool) => ({ client, tool }))
-        );
-
+        console.log("API Response:", data); // Debugging: Log API response
+  
+        if (!data.clientTools || typeof data.clientTools !== "object") {
+          console.error("Unexpected API response structure:", data);
+          return;
+        }
+  
+        // Convert { client: [tools] } → [{ client, tool }]
+        const formattedData = Object.entries(data.clientTools).flatMap(([client, tools]) => {
+          if (!Array.isArray(tools)) {
+            console.error(`Unexpected tools data for client "${client}":`, tools);
+            return [];
+          }
+          return tools.map((tool) => ({ client, tool }));
+        });
+  
         setClientTools(formattedData);
       } catch (error) {
         console.error("Error fetching client tools:", error);
       }
     }
-
+  
     fetchData();
   }, []);
-
-  // Filtering data based on search inputs
+  
   const filteredData = clientTools.filter(
     ({ client, tool }) =>
       client.toLowerCase().includes(searchTerms.client.toLowerCase()) &&
@@ -36,7 +45,7 @@ export default function ClientToolsTable() {
 
   return (
     <div className="body">
-      <h1 style={{ textAlign: "center", marginBottom: "20px" }}>Client & Tools</h1>
+      <h1 style={{ textAlign: "center", marginBottom: "20px" }}>Client Tools</h1>
 
       {/* Search Inputs */}
       <div className="searchField" style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginBottom: "20px" }}>
@@ -88,3 +97,4 @@ export default function ClientToolsTable() {
     </div>
   );
 }
+ 
