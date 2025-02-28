@@ -15,6 +15,8 @@ const EditUserPage = () => {
   const [availableTools, setAvailableTools] = useState([]);
   const [accessLevels, setAccessLevels] = useState([]);
   const [selectedTool, setSelectedTool] = useState('');
+  const [isAddTool, setIsAddTool] = useState(false);
+  const [isEditUser, setIsEditUser] = useState(false);
 
   const handleHomeClick = () => {
     router.push('/user-tools'); // Navigate to the add-users page
@@ -75,6 +77,14 @@ const EditUserPage = () => {
     }
   };
 
+  const handleEditUser = () => {
+    setIsEditUser(true)
+  };
+  
+  const handleCancelEditUser = () => {
+    setIsEditUser(false)
+  }
+
   const handleUserChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
@@ -95,7 +105,7 @@ const EditUserPage = () => {
 
       if (!response.ok) throw new Error('Failed to update user');
       alert('User updated successfully!');
-      router.push('/admin');
+      setIsEditUser(false)
     } catch (error) {
       console.error('Error updating user:', error);
     }
@@ -160,6 +170,10 @@ useEffect(() => {
   }
 }, [selectedTool]);
 
+const handleAddTool = async () => {
+  setIsAddTool(true);
+}
+
 const handleAddUserTool = async () => {
   // ✅ Check if any field is empty
   if (!newTool.tool_id || !newTool.access_level || !newTool.client || !newTool.ms_status || !newTool.access_group) {
@@ -179,7 +193,7 @@ const handleAddUserTool = async () => {
 
     alert('User-Tool entry added successfully!');
     fetchUserToolsData();
-
+    setIsAddTool(false);
     // ✅ Reset the form after successful submission
     setNewTool({ tool_id: '', access_level: '', client: '', ms_status: '', access_group: '' });
     setSelectedTool(''); // ✅ Reset the selected tool dropdown
@@ -189,12 +203,15 @@ const handleAddUserTool = async () => {
     alert("Failed to add user-tool entry. Please try again.");
   }
 };
+  const handleCancelTool = () => {
+    setIsAddTool(false);
+  }
 
   return (
     <div style={styles.container}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
   <div style={{ flex: 1, textAlign: 'center' }}>
-    <h1>Edit User</h1>
+    <h1>Edit User Details</h1>
   </div>
   <div style={{ display: 'flex', gap: '10px' }}>
     <button
@@ -227,8 +244,29 @@ const handleAddUserTool = async () => {
 </div>
 
       {/* User Details Section */}
-      <div style={styles.card}>
-        <h3 style={styles.subHeading}>User Details</h3>
+       <div style={styles.card}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+  <div style={{ flex: 1 }}>
+    <h3 style={styles.subHeading}>{user.name} </h3>
+  </div>
+  <div style={{ display: 'flex', gap: '10px' }}>
+    <button
+      style={{
+        padding: '10px 20px',
+        backgroundColor: '#3498db',
+        color: '#fff',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+      }}
+      onClick={handleEditUser} // Call the function to navigate
+    >
+      Edit Info
+    </button>
+    </div>
+    </div>
+    {isEditUser && 
+    <div>
         <div style={styles.formGroup}>
           <label>Name:</label>
           <input type="text" name="name" value={user.name} onChange={handleUserChange} style={styles.input} />
@@ -242,11 +280,33 @@ const handleAddUserTool = async () => {
           <input type="email" name="email_id" value={user.email_id} onChange={handleUserChange} style={styles.input} />
         </div>
         <button onClick={handleUserUpdate} style={styles.button}>Update User</button>
+        <button onClick={handleCancelEditUser} style={styles.button}>Cancel</button>
+        </div>
+    }
       </div>
 
       {/* User-Tools Details Section */}
       <div style={styles.card}>
-      <h3>User-Tools Details</h3>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+  <div style={{ flex: 1 }}>
+    <h3 style={styles.subHeading}> Tools</h3>
+  </div>
+  <div style={{ display: 'flex', gap: '10px' }}>
+    <button
+      style={{
+        padding: '10px 20px',
+        backgroundColor: '#3498db',
+        color: '#fff',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+      }}
+      onClick={handleAddTool} // Call the function to navigate
+    >
+      Add Tool
+    </button>
+    </div>
+    </div>
       {userTools.length > 0 ? (
         <table border="1">
           <thead>
@@ -289,7 +349,7 @@ const handleAddUserTool = async () => {
       </div>
 
       {/* Add New Tool Section */}
-      <div style={styles.card}>
+     {isAddTool && <div style={styles.card}>
         <h3 style={styles.subHeading}>Add New Tool</h3>
 
        {/* Tool Dropdown */}
@@ -337,7 +397,8 @@ const handleAddUserTool = async () => {
           <input type="text" name="access_group" value={newTool.access_group} onChange={(e) => setNewTool({ ...newTool, access_group: e.target.value })} style={styles.input} />
         </div>
         <button onClick={handleAddUserTool} style={styles.button}>Add Tool</button>
-      </div>
+        <button onClick={handleCancelTool} style={styles.button}>Cancel</button>
+      </div>}
     </div>
   );
 };
