@@ -5,17 +5,20 @@ import { useRouter } from 'next/navigation'; // Import useRouter for navigation
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 
 // Modal for authentication
+
 const AuthModal = ({ onAuthenticate, onClose, errorMessage }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
+  const router = useRouter();
   const handleSubmit = (e) => {
     e.preventDefault();
     if (username && password) {
       onAuthenticate(username, password);
     }
   };
-
+  const handleCancel = () => {
+    router.push('user-tools')
+  }
   return (
     <div className="modal-backdrop">
       <div className="modal-content">
@@ -46,7 +49,7 @@ const AuthModal = ({ onAuthenticate, onClose, errorMessage }) => {
           {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
           <div>
             <button type="submit">Login</button>
-            <button type="button" onClick={onClose}>
+            <button type="button" onClick={handleCancel}>
               Cancel
             </button>
           </div>
@@ -140,7 +143,7 @@ export default function AdminPage() {
   };
   
   const handleHomeClick = () => {
-    router.push('/user-tools'); // Navigate to the add-users page
+    router.push('/user-tools'); // Navigate to the home page
   };
   
   const openDeleteModal = (userId) => {
